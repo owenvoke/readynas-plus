@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\System;
-use Illuminate\Http\Request;
-use Symfony\Component\VarDumper\Caster\XmlReaderCaster;
 
 class HomeController extends Controller
 {
@@ -26,12 +24,14 @@ class HomeController extends Controller
     public function index()
     {
         $sys = new System();
-        $device = $sys->getDeviceInfo();
-        $health = $sys->getHealthInfo();
 
-        return view('home', [
-            'device' => $device,
-            'health' => $health
-        ]);
+        $data = [
+            'firmware' => $sys->getFirmwareInfo(),
+            'device' => $sys->getDeviceInfo(),
+            'health' => $sys->getHealthInfo(),
+            'apps' => $sys->getAppInfo(),
+        ];
+
+        return view('home', $data);
     }
 }
