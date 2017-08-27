@@ -1,4 +1,5 @@
 .app-block {
+  max-width: 10em;
   margin: 1em;
   display: inline-block;
   vertical-align: top;
@@ -10,5 +11,10 @@
     width: 64px;
     height: 64px;
     margin: 0 auto;
+  }
+  strong {
+    text-overflow: ellipsis;
+    display: block;
+    overflow: hidden;
   }
 }
