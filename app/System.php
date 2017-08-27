@@ -26,6 +26,15 @@ class System extends Model
         $this->guzzle->setDefaultOption('verify', false);
     }
 
+    public function getFirmwareInfo()
+    {
+        $response = $this->sendRequest('FW_Broker', 'FirmwareImage', '/fwbroker');
+
+        $device_info = $this->xmlToValues($response);
+
+        return $device_info;
+    }
+
     public function getDeviceInfo()
     {
         $response = $this->sendRequest('SystemInfo', 'SystemInfo');
@@ -44,7 +53,7 @@ class System extends Model
         return $result;
     }
 
-    private function sendRequest(string $resourceId, string $resourceType)
+    private function sendRequest(string $resourceId, string $resourceType, string $resourceUrl = '/dbbroker')
     {
         $xml = new \SimpleXMLElement(
             '<xs:nml
@@ -60,7 +69,7 @@ class System extends Model
         $get->addAttribute('resource-type', $resourceType);
 
         $response = $this->guzzle
-            ->post('/dbbroker', [], $xml->asXML())
+            ->post($resourceUrl, [], $xml->asXML())
             ->setAuth(env('NAS_USER'), env('NAS_PASS'))
             ->send();
 
