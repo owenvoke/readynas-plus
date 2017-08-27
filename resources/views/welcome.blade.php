@@ -72,7 +72,11 @@
         </div>
 
         <div class="links">
-            <a href="/login">Login</a>
+            @if (Auth::guest())
+                <a href="/login">Login</a>
+            @else
+                <a href="/home">Home</a>
+            @endif
         </div>
     </div>
 </div>
