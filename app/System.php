@@ -2,9 +2,11 @@
 
 namespace App;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\Model;
+use Psr\Http\Message\ResponseInterface;
+use twhiston\simplexml_debug\SxmlDebug;
 
 /**
  * Class System
@@ -22,15 +24,21 @@ class System extends Model
      */
     public function __construct()
     {
-        $this->guzzle = new Client('https://' . env('NAS_IP') . '/dbbroker');
-        $this->guzzle->setDefaultOption('verify', false);
+        $this->guzzle = new Client([
+            'base_uri' => 'https://' . env('NAS_IP') . '/dbbroker',
+            'verify' => false
+        ]);
     }
 
     public function getFirmwareInfo()
     {
-        $response = $this->sendRequest('FW_Broker', 'FirmwareImage', '/fwbroker');
+        $response = $this->sendRequest(
+            'FW_Broker',
+            'FirmwareImage',
+            '/fwbroker'
+        );
 
-        $device_info = $this->xmlToValues($response);
+        $device_info = $this->xmlToArray($response);
 
         return $device_info;
     }
@@ -39,7 +47,7 @@ class System extends Model
     {
         $response = $this->sendRequest('SystemInfo', 'SystemInfo');
 
-        $device_info = $this->xmlToValues($response);
+        $device_info = $this->xmlToArray($response);
 
         return $device_info;
     }
@@ -48,7 +56,7 @@ class System extends Model
     {
         $response = $this->sendRequest('HealthInfo', 'Health_Collection');
 
-        $result = $this->xmlToValues($response);
+        $result = $this->xmlToArray($response);
 
         return $result;
     }
@@ -57,7 +65,7 @@ class System extends Model
     {
         $response = $this->sendRequest('LaunchableApp', 'LocalApp_Collection');
 
-        $result = $this->xmlToValues($response);
+        $result = $this->xmlToArray($response);
 
         return $result;
     }
@@ -69,8 +77,8 @@ class System extends Model
             xmlns:xs="http://www.netgear.com/protocol/transaction/NMLSchema-0.9"
             xmlns="urn:netgear:nas:readynasd"/>'
         );
-        $xml->addAttribute('src', 'dpv_' . time());
-        $xml->addAttribute('dst', 'nas');
+        $xml->addAttribute('dst', 'dpv_' . time());
+        $xml->addAttribute('src', 'nas');
         $transaction = $xml->addChild('xs:transaction');
         $get = $transaction->addChild('xs:get');
 
@@ -78,32 +86,29 @@ class System extends Model
         $get->addAttribute('resource-type', $resourceType);
 
         $response = $this->guzzle
-            ->post($resourceUrl, [], $xml->asXML())
-            ->setAuth(env('NAS_USER'), env('NAS_PASS'))
-            ->send();
+            ->post($resourceUrl, [
+                'body' => $xml->asXML(),
+                'auth' => [
+                    env('NAS_USER'),
+                    env('NAS_PASS')
+                ]
+            ]);
 
         return $response;
     }
 
-    private function xmlToValues(Response $response)
+    private function xmlToArray(ResponseInterface $response)
     {
-        $data = [];
-        $p = xml_parser_create();
-        xml_parse_into_struct(
-            $p,
+        $data = new \SimpleXMLElement(
             $response->getBody(),
-            $values
+            null,
+            false,
+            'xs',
+            true
         );
-        xml_parser_free($p);
 
-        foreach ($values as $value) {
-            if ($value['type'] !== 'complete' || !isset($value['value'])) {
-                continue;
-            }
-
-            $data[$value['tag']] = $value['value'];
-        }
-
-        return $data;
+        return $data->transaction->response->error ??
+            $data->transaction->response->result->{'get-s'}->children() ??
+            null;
     }
 }
