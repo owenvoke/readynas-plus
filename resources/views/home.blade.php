@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Dashboard</div>
+                    <div class="panel-heading">Device</div>
 
                     <div class="panel-body">
                         @if (session('status'))
@@ -13,9 +13,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-
-                        You are logged in!
                     </div>
+                    <hr>
+                    <div class="panel-heading">Apps</div>
+
+                    <div class="panel-body"></div>
                 </div>
             </div>
         </div>
