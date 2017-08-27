@@ -22,26 +22,22 @@
                             <tbody>
                             <tr>
                                 <th class="text-right">Model:</th>
-                                <td>{{ $device['MODEL'] or 'UNKNOWN' }}</td>
+                                <td>{{ $device->SystemInfo->Model or 'UNKNOWN' }}</td>
                             </tr>
                             <tr>
                                 <th class="text-right">Status:</th>
-                                <td>{{ $device['STATUS'] or 'UNKNOWN' }}</td>
+                                <td>{{ $device->SystemInfo->Status or 'UNKNOWN' }}</td>
                             </tr>
                             <tr>
                                 <th class="text-right">Serial:</th>
-                                <td>{{ $device['SERIAL'] or 'UNKNOWN' }}</td>
+                                <td>{{ $device->SystemInfo->Serial or 'UNKNOWN' }}</td>
                             </tr>
                             <tr>
                                 <th class="text-right">Firmware:</th>
                                 <td>
-                                    <span>{{ $device['FIRMWARE_VERSION'] or 'UNKNOWN' }}</span>
+                                    <span>{{ $device->SystemInfo->Firmware_Version or 'UNKNOWN' }}</span>
                                     (<a href="/updates/check">Check for updates</a>)
                                 </td>
-                            </tr>
-                            <tr>
-                                <th class="text-right">Device Time:</th>
-                                <td>{{ date('M d, Y H:i:s', $device['FIRMWARE_TIME']) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -49,7 +45,16 @@
                     <hr>
                     <div class="panel-heading">Apps</div>
 
-                    <div class="panel-body"></div>
+                    <div class="panel-body">
+                        @foreach ($apps->LocalApp_Collection->Application as $value)
+                            <div class="app-block text-center">
+                                <a href="{{ $value->LaunchURL }}" target="_blank">
+                                    <img src="https://{{ env('NAS_IP') }}/apps/logo/{{ $value->attributes()->{'resource-id'} }}.png">
+                                    <strong>{{ $value->Name }}</strong>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
