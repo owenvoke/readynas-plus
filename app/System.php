@@ -53,6 +53,15 @@ class System extends Model
         return $result;
     }
 
+    public function getAppInfo()
+    {
+        $response = $this->sendRequest('LaunchableApp', 'LocalApp_Collection');
+
+        $result = $this->xmlToValues($response);
+
+        return $result;
+    }
+
     private function sendRequest(string $resourceId, string $resourceType, string $resourceUrl = '/dbbroker')
     {
         $xml = new \SimpleXMLElement(
