@@ -10,11 +10,12 @@
   "type": "project",
   "require": {
     "php": ">=7.1.0",
-    "ext-xml": "*",
     "ext-curl": "*",
+    "ext-xml": "*",
+    "guzzlehttp/guzzle": "^6.3.0",
     "laravel/framework": "5.4.*",
     "laravel/tinker": "~1.0",
-    "guzzlehttp/guzzle": "^6.3.0"
+    "rych/bytesize": "^1.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
