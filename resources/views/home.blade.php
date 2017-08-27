@@ -29,6 +29,15 @@
                                 <td>{{ $device->SystemInfo->Status or 'UNKNOWN' }}</td>
                             </tr>
                             <tr>
+                                <th class="text-right">Antivirus:</th>
+                                <td>
+                                    <a href="/antivirus">
+                                        {{ ($device->SystemInfo->{'Anti-Virus-Def-Version'} == 'not enabled') ?
+                                        'Disabled' : $device->SystemInfo->{'Anti-Virus-Def-Version'} }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="text-right">Serial:</th>
                                 <td>{{ $device->SystemInfo->Serial or 'UNKNOWN' }}</td>
                             </tr>
@@ -47,7 +56,7 @@
 
                     <div class="panel-body">
                         @foreach ($apps->LocalApp_Collection->Application as $value)
-                            <div class="app-block text-center">
+                            <div class="app-block text-center" title="{{ $value->Description }}">
                                 <a href="{{ $value->LaunchURL }}" target="_blank">
                                     <img src="https://{{ env('NAS_IP') }}/apps/logo/{{ $value->attributes()->{'resource-id'} }}.png">
                                     <strong>{{ $value->Name }}</strong>
