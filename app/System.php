@@ -70,6 +70,15 @@ class System extends Model
         return $result;
     }
 
+    public function getDiskInfo()
+    {
+        $response = $this->sendRequest('DiskEnclosure', 'DiskEnclosure_Collection');
+
+        $result = $this->xmlToArray($response);
+
+        return $result;
+    }
+
     private function sendRequest(string $resourceId, string $resourceType, string $resourceUrl = '/dbbroker')
     {
         $xml = new \SimpleXMLElement(
