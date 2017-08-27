@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'ReadyNAS+') }}</title>
 
     <!-- Styles -->
-    @include('partials.styles)
+    @include('partials.styles')
 
 </head>
 <body>
@@ -23,7 +23,7 @@
 </div>
 
 <!-- Scripts -->
-@include('partials.scripts)
+@include('partials.scripts')
 
 </body>
 </html>
