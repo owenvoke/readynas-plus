@@ -79,6 +79,15 @@ class System extends Model
         return $result;
     }
 
+    public function getSmartInfo($drive)
+    {
+        $response = $this->sendRequest($drive, 'Disk_SMART_Info');
+
+        $result = $this->xmlToArray($response);
+
+        return $result;
+    }
+
     public function getVolumeInfo()
     {
         $response = $this->sendRequest('Volumes', 'Volume_Collection');
