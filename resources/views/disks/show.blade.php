@@ -9,6 +9,7 @@
                         <div class="panel-heading">
                             <strong>{{ $disk->DiskSMARTInfo->Device }}:</strong>
                             <span>{{ $disk->DiskSMARTInfo->Model }}</span>
+                            <span>({{ $disk->DiskSMARTInfo->Class }})</span>
                         </div>
 
                         <div class="panel-body">
@@ -57,7 +58,7 @@
                                 </tr>
                                 <tr>
                                     <th>Firmware:</th>
-                                    <td>{{ $disk->DiskSMARTInfo->FirmwareVersion }}</td>
+                                    <td>{{ $disk->DiskSMARTInfo->Firmware }}</td>
                                 </tr>
                             </table>
 
