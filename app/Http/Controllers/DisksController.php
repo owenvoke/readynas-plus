@@ -18,6 +18,7 @@ class DisksController extends Controller
 
         $data = [
             'disks' => $sys->getDiskInfo(),
+            'volumes' => $sys->getVolumeInfo(),
         ];
 
         return view('disks.index', $data);
