@@ -23,4 +23,24 @@ class DisksController extends Controller
 
         return view('disks.index', $data);
     }
+
+    public function show($drive)
+    {
+        $sys = new System();
+
+        $data = [
+            'disk' => $sys->getDiskInfo()
+        ];
+
+        foreach ($data['disk']->DiskEnclosure_Collection->DiskEnclosure as $value) {
+            foreach ($value->Disk_Collection->Disk as $disk) {
+                if ($disk->attributes()->{'resource-id'} == $drive) {
+                    $data['disk'] = $disk;
+                    break;
+                }
+            }
+        }
+
+        return view('disks.show', $data);
+    }
 }
