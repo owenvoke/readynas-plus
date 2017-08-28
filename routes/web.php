@@ -18,4 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/disks', 'DisksController@index')->name('disks');
+
+Route::prefix('disks')->group(function () {
+    Route::get('', 'DisksController@index');
+    Route::get('{drive}', 'DisksController@show');
+});
