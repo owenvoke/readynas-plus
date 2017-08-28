@@ -61,7 +61,7 @@
                                         </p>
 
                                         <strong>{{ $disk->attributes()->Model }}</strong>
-                                        <span>{{ Rych\ByteSize\ByteSize::formatBinary($disk->attributes()->Capacity) }}</span>
+                                        <span>{{ Rych\ByteSize\ByteSize::formatMetric($disk->attributes()->Capacity) }}</span>
                                         <span>{{ $disk->attributes()->HardwareInterface }}</span>
                                     </a>
                                 </div>
