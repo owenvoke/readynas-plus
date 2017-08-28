@@ -29,17 +29,8 @@ class DisksController extends Controller
         $sys = new System();
 
         $data = [
-            'disk' => $sys->getDiskInfo()
+            'disk' => $sys->getSmartInfo($drive),
         ];
-
-        foreach ($data['disk']->DiskEnclosure_Collection->DiskEnclosure as $value) {
-            foreach ($value->Disk_Collection->Disk as $disk) {
-                if ($disk->attributes()->{'resource-id'} == $drive) {
-                    $data['disk'] = $disk;
-                    break;
-                }
-            }
-        }
 
         return view('disks.show', $data);
     }
